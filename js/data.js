@@ -3,10 +3,10 @@
    ========================================================== */
 
 const CATEGORIES = [
-  { id: 'todos',     label: 'Todo el menú' },
-  { id: 'completos', label: 'Completos'    },
-  { id: 'papas',     label: 'Papas Fritas' },
-  { id: 'combos',    label: 'Combos'       },
+  { id: 'todos',     label: 'Todo el menú',     icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>' },
+  { id: 'completos', label: 'Completos',        icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>' },
+  { id: 'papas',     label: 'Papas Fritas',    icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="12" rx="9" ry="5"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 18h6"/></svg>' },
+  { id: 'combos',    label: 'Combos',          icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7h-9"/><path d="M14 17H5a3 3 0 0 1 0-6h14a3 3 0 0 1 0 6z"/><path d="M14 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>' },
 ];
 
 const ZONES = [
@@ -22,9 +22,9 @@ const PRODUCTS = [
   {
     id: 1,
     slug: 'completo-clasico',
-    name: 'Completo Clásico',
+name: 'Completo Clásico',
     category: 'completos',
-    description: 'El balance justo entre el toque fresco del tomate y el sabor intenso del chucrut, sobre pan artesanal horneado cada día. El de siempre, bien hecho.',
+    description: 'Tomate fresco, chucrut y mayonesa sobre pan artesanal.',
     price: 1000,
     tag: null,
     hasSizes: false,
@@ -42,9 +42,9 @@ const PRODUCTS = [
     slug: 'completo-italiano',
     name: 'Completo Italiano',
     category: 'completos',
-    description: 'Con palta natural trabajada a diario, tomate fresco y mayonesa casera sobre vienesa de primera. El más pedido del local, y con razón.',
+    description: 'Palta natural, tomate fresco y mayonesa casera.',
     price: 1600,
-    tag: 'el más pedido',
+    tag: 'Más vendido',
     hasSizes: false,
     image: 'images/italiano.png',
     ingredients: [
@@ -60,9 +60,10 @@ const PRODUCTS = [
     slug: 'combo-italiano-bebida',
     name: 'Italiano + Bebida',
     category: 'combos',
-    description: 'El Italiano completo más una bebida individual bien fría de 350ml. La dupla ideal para el almuerzo o la once, al mejor precio del barrio.',
+    description: 'Italiano completo más bebida 350ml.',
     price: 2000,
-    tag: 'mejor precio',
+    tag: 'COMBO',
+    badge: 'ribbon',
     hasSizes: false,
     image: 'images/italianobebida.png',
     ingredients: [
@@ -79,7 +80,7 @@ const PRODUCTS = [
     slug: 'papas-fritas',
     name: 'Papas Fritas',
     category: 'papas',
-    description: 'Papas de origen nacional, fritas en su punto exacto: crocantes por fuera y blanditas por dentro. Con sal de mar. Elige el tamaño que más te acomoda.',
+    description: 'Papas fritas crocantes con sal de mar.',
     price: 1000,
     tag: null,
     hasSizes: true,

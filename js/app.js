@@ -20,6 +20,14 @@ const Toast = (() => {
   return { show };
 })();
 
+/* ── Logo Lightbox ── */
+function openLogoLightbox() {
+  document.getElementById('logo-lightbox')?.classList.add('open');
+}
+function closeLogoLightbox() {
+  document.getElementById('logo-lightbox')?.classList.remove('open');
+}
+
 /* ── App init ── */
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -33,18 +41,25 @@ document.addEventListener('DOMContentLoaded', () => {
       Menu.forceCloseModal();
       Cart.close();
       Checkout.close();
+      closeLogoLightbox();
     }
   });
 
-  /* Scroll: shrink header on scroll */
-  const header = document.getElementById('site-header');
-  let lastScroll = 0;
-  window.addEventListener('scroll', () => {
-    const s = window.scrollY;
-    if (s > 80) header.classList.add('scrolled');
-    else        header.classList.remove('scrolled');
-    lastScroll = s;
-  }, { passive: true });
+  /* Footer animations - already visible, no scroll needed */
+  const unifiedFooter = document.getElementById('about');
+  if (unifiedFooter) {
+    const ufBg = unifiedFooter.querySelector('.uf-bg-img');
+    if (ufBg) {
+      ufBg.style.opacity = '0';
+      ufBg.style.transition = 'opacity 1s ease';
+      setTimeout(() => { ufBg.style.opacity = '1'; }, 100);
+    }
+    const sections = unifiedFooter.querySelectorAll('.uf-section');
+    sections.forEach((sec, i) => {
+      sec.style.animation = `reveal-up 0.6s ease forwards`;
+      sec.style.animationDelay = `${i * 0.15}s`;
+    });
+  }
 
   /* Stagger card entrance on first paint */
   requestAnimationFrame(() => {

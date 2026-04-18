@@ -29,6 +29,7 @@ const Menu = (() => {
     catListEl().innerHTML = CATEGORIES.map(cat => `
       <button class="cat-btn ${cat.id === activeCategory ? 'active' : ''}"
         data-cat="${cat.id}" onclick="Menu.filterBy('${cat.id}')">
+        ${cat.icon || ''}
         ${cat.label}
       </button>`).join('');
   }
@@ -46,6 +47,8 @@ const Menu = (() => {
     const list = activeCategory === 'todos'
       ? PRODUCTS
       : PRODUCTS.filter(p => p.category === activeCategory);
+
+    const hasItems = Cart?.getTotalCount?.() > 0;
 
     const cat = CATEGORIES.find(c => c.id === activeCategory);
     titleEl().textContent = activeCategory === 'todos' ? 'Toda la carta' : (cat?.label || '');
@@ -70,11 +73,11 @@ const Menu = (() => {
         <div class="card-img-wrap">
           <img src="${p.image}" alt="${p.name}" loading="lazy">
           ${p.tag ? `<span class="card-tag ${tagClass}">${p.tag}</span>` : ''}
-          <div class="card-add-badge" aria-hidden="true">
+          <button class="card-add-btn" onclick="event.stopPropagation();Menu.quickAdd(${p.id})" aria-label="Añadir ${p.name}">
             <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
             </svg>
-          </div>
+          </button>
         </div>
         <div class="card-body">
           <p class="card-name">${p.name}</p>
@@ -285,9 +288,75 @@ const Menu = (() => {
     document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' });
   }
 
+  function filterBySearch(query) {
+    activeCategory = 'todos';
+    renderCategories();
+    const filtered = PRODUCTS.filter(p => 
+      p.name.toLowerCase().includes(query) || 
+      p.description.toLowerCase().includes(query)
+    );
+    renderSearchGrid(filtered, query);
+  }
+
+  function renderSearchGrid(list, query) {
+    const title = `Resultados para "${query}"`;
+    titleEl().textContent = title;
+    titleEl().style.display = list.length > 0 ? 'block' : 'none';
+
+    if (list.length === 0) {
+      gridEl().innerHTML = `<div style="grid-column:1/-1;padding:48px 0;text-align:center;color:var(--text-3);font-size:13px;">No se encontraron productos.</div>`;
+      return;
+    }
+
+    gridEl().innerHTML = list.map((p, i) => {
+      const priceLabel = p.hasSizes
+        ? `<span class="card-price-desde">Desde</span><span class="card-price">$${p.sizes[0].price.toLocaleString('es-CL')}</span>`
+        : `<span class="card-price">$${p.price.toLocaleString('es-CL')}</span>`;
+
+      const tagClass = p.tag ? `tag-${p.tag.replace(/\s+/g,'-')}` : '';
+
+      return `
+      <div class="product-card" style="animation-delay:${i*55}ms"
+        onclick="Menu.openModal(${p.id})" role="button" tabindex="0"
+        aria-label="Ver ${p.name}">
+        <div class="card-img-wrap">
+          <img src="${p.image}" alt="${p.name}" loading="lazy">
+          ${p.tag ? `<span class="card-tag ${tagClass}">${p.tag}</span>` : ''}
+          <button class="card-add-btn" onclick="event.stopPropagation();Menu.quickAdd(${p.id})" aria-label="Añadir ${p.name}">
+            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card-body">
+          <p class="card-name">${p.name}</p>
+          <p class="card-desc">${p.description}</p>
+          <div>${priceLabel}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  /* ── quickAdd desde la card ── */
+  function quickAdd(productId) {
+    const product = PRODUCTS.find(p => p.id === productId);
+    if (!product) return;
+    
+    if (product.hasSizes && product.sizes?.length > 0) {
+      openModal(productId);
+      return;
+    }
+
+    if (typeof Cart !== 'undefined' && Cart.add) {
+      Cart.add({ ...product, price: product.price }, 1, [], null);
+      Toast.show(`${product.name} añadido`, 'success');
+    }
+  }
+
   return {
     init, filterBy, openModal, forceCloseModal,
     selectSize, toggleIngredient, updateQty, addToCart, scrollToMenu,
+    filterBySearch, quickAdd,
   };
 
 })();

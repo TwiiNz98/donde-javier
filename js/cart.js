@@ -94,14 +94,10 @@ const Cart = (() => {
       list.innerHTML = `
         <div class="cart-empty">
           <div class="cart-empty-icon">
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-              <line x1="3" y1="6" x2="21" y2="6"/>
-              <path d="M16 10a4 4 0 0 1-8 0"/>
-            </svg>
+            😊
           </div>
-          <h4>Tu pedido está vacío</h4>
-          <p>Agrega productos de la carta para armar tu pedido.</p>
+          <h4>¡Tu pedido te espera!</h4>
+          <p>Explora la carta y pide tus favoritos.</p>
         </div>`;
       footer.innerHTML = '';
     } else {
@@ -156,11 +152,15 @@ const Cart = (() => {
   function updateBadge(pop = false) {
     const n = getTotalCount();
     if (!badgeEl()) return;
+    
+    const btn = document.querySelector('.cart-header-btn');
     if (n === 0) {
       badgeEl().classList.remove('visible');
+      btn?.classList.remove('has-items');
     } else {
       badgeEl().textContent = n > 99 ? '99+' : n;
       badgeEl().classList.add('visible');
+      btn?.classList.add('has-items');
       if (pop) {
         badgeEl().classList.remove('badge-pop-anim');
         void badgeEl().offsetWidth;

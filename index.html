@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#FAFAF8">
   <meta name="description" content="Donde Javier — Los mejores completos y papas fritas de Osorno con delivery a domicilio. Pide por WhatsApp.">
   <title>Donde Javier | Delivery Osorno</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23C41831' d='M3 11l19-9-9 19-2-8-8-2z'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
@@ -17,28 +18,25 @@
   <header class="site-header" id="site-header">
     <div class="header-inner">
       <div class="brand">
-        <div class="brand-icon" aria-hidden="true">
-          <svg width="19" height="19" fill="none" stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M3 11l19-9-9 19-2-8-8-2z"/>
-          </svg>
-        </div>
+        <img src="images/local.jpg" alt="Donde Javier" class="brand-logo" onclick="openLogoLightbox()" style="cursor:zoom-in">
         <div>
           <span class="brand-name">Donde Javier</span>
-          <span class="brand-location">Osorno · Rahue Alto</span>
+          <span class="brand-location"><span class="loc-osorno">Osorno</span> - <span class="loc-rahue">Rahue Alto</span></span>
         </div>
       </div>
       <div class="header-right">
         <div class="status-pill" aria-label="Local abierto">
           <span class="status-dot" aria-hidden="true"></span>
-          Abierto
+          <span class="status-pill-text">Abierto</span>
         </div>
         <button class="cart-header-btn" onclick="Cart.toggle()" aria-label="Ver mi pedido">
-          <svg fill="none" stroke="currentColor" stroke-width="2"
-               stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <path d="M16 10a4 4 0 0 1-8 0"/>
+          <svg class="cart-icon-empty" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <svg class="cart-icon-filled" fill="currentColor" viewBox="0 0 24 24" style="display:none">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" fill="currentColor"/>
           </svg>
           <span class="cart-badge" id="cart-badge" aria-live="polite">0</span>
         </button>
@@ -46,61 +44,65 @@
     </div>
   </header>
 
+  <!-- ══════════════════════ HERO ══════════════════════ -->
+  <section class="hero" id="hero" aria-labelledby="hero-title">
+    <h1 class="hero-title" id="hero-title">
+      Lo rico de verdad,<br>llega a tu <span>puerta.</span>
+    </h1>
+    <p class="hero-sub">
+      Completos artesanales y papas fritas recién hechos.
+    </p>
+    <div class="hero-info-blocks">
+      <span class="hero-info-item">📍 Rahue Alto</span>
+      <span class="hero-info-dot">·</span>
+      <span class="hero-info-item">🕐 12:00 - 22:00</span>
+      <span class="hero-info-dot">·</span>
+      <span class="hero-info-item">📞 +56 9 4422 2079</span>
+    </div>
+  </section>
+
   <!-- ══════════════════ CATEGORY NAV ══════════════════ -->
   <nav class="category-nav" aria-label="Categorías del menú">
     <div class="category-nav-inner" id="category-list" role="tablist"></div>
   </nav>
 
-  <!-- ══════════════════════ HERO ══════════════════════ -->
-  <section class="hero" id="hero" aria-labelledby="hero-title">
-    <p class="hero-eyebrow">Delivery a domicilio · Osorno</p>
-    <h1 class="hero-title" id="hero-title">
-      Lo rico de verdad,<br>llega a tu <span>puerta.</span>
-    </h1>
-    <p class="hero-sub">
-      Completos artesanales y papas fritas recién hechas. Sin vueltas, sin esperas.
-      Pide y en unos minutos lo tienes en casa.
-    </p>
-    <button class="hero-cta" onclick="Menu.scrollToMenu()">
-      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"
-           viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-      Ver la carta
-    </button>
-  </section>
-
   <!-- ══════════════════════ MENÚ ══════════════════════ -->
   <main class="menu-section" id="menu" aria-label="Carta de productos">
     <div class="menu-header">
-      <h2 class="menu-title" id="menu-title">Toda la carta</h2>
-      <span class="menu-count" id="menu-count" aria-live="polite"></span>
+      <h2 class="menu-title" id="menu-title">Nuestra carta</h2>
+      <span class="menu-count" id="menu-count"></span>
     </div>
     <div class="products-grid" id="products-grid" role="list"></div>
   </main>
 
-  <!-- ══════════════════════ FOOTER ══════════════════════ -->
-  <footer class="site-footer">
-    <p class="footer-brand">Donde Javier</p>
-    <p class="footer-sub">El sabor que nos identifica · Osorno, Chile</p>
-    <div class="footer-links">
-      <a href="https://instagram.com/donde.javier" target="_blank" rel="noopener"
-         class="footer-link" aria-label="Instagram de Donde Javier">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-        </svg>
-        @donde.javier
-      </a>
-      <a href="https://wa.me/56944222079" target="_blank" rel="noopener"
-         class="footer-link" aria-label="WhatsApp de Donde Javier">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
-        </svg>
-        +56 9 4422 2079
-      </a>
+<!-- ══════════════════════ FOOTER FUSIONADO ══════════════════════ -->
+  <footer class="unified-footer" id="about">
+    <div class="uf-bg">
+      <img src="images/local.jpg" alt="Donde Javier" class="uf-bg-img">
+      <div class="uf-bg-overlay"></div>
     </div>
-    <p class="footer-copy">© 2026 Donde Javier · Osorno, Chile · Todos los derechos reservados</p>
+    <div class="uf-content">
+      <div class="uf-section uf-brand">
+        <p class="uf-eyebrow" style="animation-delay:0.4s">Próximamente</p>
+        <h2 class="uf-title" style="animation-delay:0.5s">Donde Javier</h2>
+        <p class="uf-tagline" style="animation-delay:0.55s">El sabor que nos identifica</p>
+        <p class="uf-desc" style="animation-delay:0.6s">
+          El sabor de siempre llega pronto a Osorno. Completos artesanos 
+          y papas fritas crujientes, hechos con los mejores ingredientes 
+          y la pasión que nos caracteriza. ¡Prepárate para probarnos!
+        </p>
+      </div>
+      <div class="uf-section uf-cta" style="animation-delay:0.7s">
+        <button class="uf-whatsapp" onclick="Menu.scrollToMenu()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+          Ver Productos
+        </button>
+      </div>
+    </div>
   </footer>
+  <p class="site-copy">© 2026 Donde Javier · Osorno, Chile</p>
 
 
   <!-- ══════════════════ MODAL PRODUCTO ══════════════════ -->
@@ -115,6 +117,7 @@
   <aside class="cart-drawer" id="cart-drawer"
          role="complementary" aria-label="Tu pedido">
     <div class="drawer-header">
+      <button class="drawer-clear" onclick="Cart.clear()" aria-label="Vaciar carrito">Vaciar</button>
       <h3 class="drawer-title">
         <svg fill="none" stroke="currentColor" stroke-width="2"
              stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
@@ -135,10 +138,15 @@
   </aside>
 
 
-  <!-- ════════════════ CHECKOUT (bottom sheet) ════════════ -->
+  <!-- ════════════════ CHECKOUT ══════════════════════════ -->
   <div class="checkout-overlay" id="checkout-overlay"
        role="dialog" aria-modal="true" aria-label="Confirmar pedido">
     <div class="checkout-sheet" id="checkout-sheet"></div>
+  </div>
+
+  <!-- ════════════════ LOGO LIGHTBOX ══════════════════════════ -->
+  <div class="logo-lightbox" id="logo-lightbox" onclick="closeLogoLightbox()">
+    <img src="images/local.jpg" alt="Donde Javier" class="logo-lightbox-img" onclick="event.stopPropagation()">
   </div>
 
 
