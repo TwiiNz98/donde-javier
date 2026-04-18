@@ -690,26 +690,26 @@ a { color: inherit; text-decoration: none; }
 .go-checkout-btn:active { transform: scale(0.98); }
 .go-checkout-btn svg { width: 18px; height: 18px; }
 
-/* ─── 10. CHECKOUT ─── */
+/* ─── 10. CHECKOUT - Mismo estilo que el drawer ─── */
 .checkout-overlay {
   position: fixed; inset: 0; z-index: 300;
-  background: rgba(28,26,23,0.55);
-  backdrop-filter: blur(10px);
-  display: flex; align-items: flex-end; justify-content: center;
+  background: rgba(28,26,23,0.4);
+  backdrop-filter: blur(4px);
   opacity: 0; pointer-events: none; transition: opacity 0.3s;
 }
 .checkout-overlay.open { opacity: 1; pointer-events: auto; }
 .checkout-sheet {
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: min(400px, 100vw);
   background: var(--surface);
-  border: 1px solid var(--border); border-bottom: none;
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  width: 100%; max-width: 560px; max-height: 92vh;
-  display: flex; flex-direction: column; overflow: hidden;
-  transform: translateY(100%);
-  transition: transform 0.42s cubic-bezier(0.32,0,0.16,1);
-  box-shadow: var(--shadow-lg);
+  border-left: 1px solid var(--border);
+  z-index: 181;
+  display: flex; flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.38s cubic-bezier(0.32,0,0.16,1);
+  box-shadow: -12px 0 48px rgba(28,26,23,0.1);
 }
-.checkout-overlay.open .checkout-sheet { transform: translateY(0); }
+.checkout-overlay.open .checkout-sheet { transform: translateX(0); }
 
 .checkout-header {
   padding: 10px 20px 14px;
@@ -920,9 +920,6 @@ select.form-input { cursor: pointer; }
   .product-modal { border-radius: var(--radius-xl); border: 1px solid var(--border); }
   .product-modal { transform: translateY(30px) scale(0.96); }
   .modal-overlay.open .product-modal { transform: translateY(0) scale(1); }
-  .checkout-sheet { border-radius: var(--radius-xl); border: 1px solid var(--border); max-height: 85vh; }
-  .checkout-sheet { transform: translateY(30px) scale(0.96); }
-  .checkout-overlay.open .checkout-sheet { transform: translateY(0) scale(1); }
   .hero { padding: 64px 24px 56px; }
 }
 @media (min-width: 960px) {
