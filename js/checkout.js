@@ -340,9 +340,9 @@ const Checkout = (() => {
     if (field) field.classList.remove('error');
   }
 
-  /* ═══════════════════════════════════════════════════════
-     SUBMIT
-     ═══════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════
+      SUBMIT
+      ═══════════════════════════════════════════════════════ */
   function submit() {
     if (!validateStep2()) {
       Toast.show('Completa todos los campos requeridos', 'error');
@@ -360,60 +360,90 @@ const Checkout = (() => {
     const btn = document.getElementById('send-order-btn');
     if (btn) { btn.disabled = true; btn.innerHTML = '⏳ Enviando...'; }
 
-    const deliveryCost = zone ? getDeliveryCost(zone) : 0;
-    const subtotal = Cart.getSubtotal();
-    const total = subtotal + deliveryCost;
-    const orderId = generateOrderId();
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long' });
-    const timeStr = now.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+    try {
+      const deliveryCost = zone ? getDeliveryCost(zone) : 0;
+      const subtotal = Cart.getSubtotal();
+      const total = subtotal + deliveryCost;
+      const orderId = generateOrderId();
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      const timeStr = now.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
 
-    let itemLines = '';
-    items.forEach((item, i) => {
-      const sub = item.price * item.qty;
-      itemLines += `${i + 1}. *${item.name}* × ${item.qty}\n`;
-      itemLines += `   Precio: $${item.price.toLocaleString('es-CL')}\n`;
-      if (item.removed.length > 0) itemLines += `   ⚠️ _Sin: ${item.removed.join(', ')}_\n`;
-      itemLines += `   Subtotal: *$${sub.toLocaleString('es-CL')}*\n`;
-      if (i < items.length - 1) itemLines += `\n`;
-    });
+      let itemLines = '';
+      let itemNumber = 1;
+      items.forEach((item) => {
+        const sub = item.price * item.qty;
+        itemLines += `${itemNumber}. ${item.name} ×${item.qty}\n`;
+        itemLines += `   $${item.price.toLocaleString('es-CL')} c/u = $${sub.toLocaleString('es-CL')}\n`;
+        if (item.removed.length > 0) {
+          itemLines += `   ⚠️ Sin: ${item.removed.join(', ')}\n`;
+        }
+        itemNumber++;
+      });
 
-    const deliveryLine = deliveryCost === 0 ? `🚚 *Delivery:* Gratis` : `🚚 *Delivery:* $${deliveryCost.toLocaleString('es-CL')}`;
-    const notesLine = notes ? `\n📝 *Notas:* ${notes}` : '';
+      const deliveryLine = deliveryCost === 0 ? '   $0 (GRATIS)' : `   $${deliveryCost.toLocaleString('es-CL')}`;
+      const notesLine = notes ? `\n📝 Notas: ${notes}` : '';
 
-    const message = [
-      `🌭 *DONDE JAVIER — DELIVERY OSORNO*`,
-      `${'─'.repeat(32)}`,
-      `📋 *N° Pedido:* ${orderId}`,
-      `📅 ${dateStr}  ·  🕐 ${timeStr}`,
-      `${'─'.repeat(32)}`,
-      ``,
-      `👤 *Cliente:* ${name}`,
-      `📞 *Teléfono:* ${phone}`,
-      `📍 *Dirección:* ${address}`,
-      `🗺 *Sector:* ${zone?.name || '—'}${notesLine}`,
-      ``,
-      `${'─'.repeat(32)}`,
-      `🛒 *DETALLE DEL PEDIDO*`,
-      `${'─'.repeat(32)}`,
-      ``,
-      itemLines,
-      `${'─'.repeat(32)}`,
-      `🧾 *Subtotal:* $${subtotal.toLocaleString('es-CL')}`,
-      deliveryLine,
-      `💰 *TOTAL A PAGAR: $${total.toLocaleString('es-CL')}*`,
-      `${'─'.repeat(32)}`,
-      ``,
-      `_Tiempo estimado: ${zone?.eta || '25–40 min'}_`,
-      `_¡Gracias por tu pedido!_ 🙏`,
-    ].join('\n');
+      const message = [
+        '═══════════════════════════════════',
+        '        🍔 DONDE JAVIER 🍔',
+        '      Delivery Osorno - Rahue Alto',
+        '═══════════════════════════════════',
+        '',
+        `📋 PEDIDO N°: ${orderId}`,
+        `📅 Fecha: ${dateStr}`,
+        `🕐 Hora: ${timeStr}`,
+        '',
+        '───────────────────────────────────',
+        '          DATOS DEL CLIENTE',
+        '───────────────────────────────────',
+        `👤 Nombre: ${name}`,
+        `📞 Teléfono: ${phone}`,
+        `📍 Dirección: ${address}`,
+        `🗺 Sector: ${zone?.name || '—'}${notesLine}`,
+        '',
+        '───────────────────────────────────',
+        '             TU PEDIDO',
+        '───────────────────────────────────',
+        '',
+        itemLines,
+        '───────────────────────────────────',
+        '            RESUMEN',
+        '───────────────────────────────────',
+        `Subtotal:            $${subtotal.toLocaleString('es-CL')}`,
+        `Delivery:${deliveryLine}`,
+        '───────────────────────────────────',
+        `💰 TOTAL A PAGAR:   $${total.toLocaleString('es-CL')}`,
+        '═══════════════════════════════════',
+        '',
+        `⏱ Tiempo estimado: ${zone?.eta || '25-35 min'}`,
+        '📱 Confirmaremos tu pedido por WhatsApp',
+        '',
+        '🙏 ¡Gracias por tu preferencia!',
+      ].join('\n');
 
-    setTimeout(() => {
-      window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+      console.log('=== PEDIDO GENERADO ===');
+      console.log('URL WhatsApp:', `https://wa.me/${WA_NUMBER}`);
+      console.log('Mensaje:', message);
+
+      const waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
+      
+      const waWindow = window.open(waUrl, '_blank');
+      
+      if (!waWindow || waWindow.closed || typeof waWindow.closed === 'undefined') {
+        window.location.href = waUrl;
+        Toast.show('WhatsApp se abrirá automáticamente', 'default');
+      }
+      
       Cart.clear();
       close();
       Toast.show('¡Pedido enviado por WhatsApp!', 'success');
-    }, 300);
+      
+    } catch (error) {
+      console.error('Error al enviar pedido:', error);
+      Toast.show('Error al enviar. Intenta de nuevo.', 'error');
+      if (btn) { btn.disabled = false; btn.innerHTML = 'Confirmar ✓'; }
+    }
   }
 
   function generateOrderId() {
