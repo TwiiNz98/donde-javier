@@ -315,14 +315,20 @@ const Checkout = (() => {
      ═══════════════════════════════════════════════════════ */
   function validateStep2() {
     let ok = true;
-    const name = document.getElementById('client-name')?.value.trim();
-    const phone = document.getElementById('client-phone')?.value.trim();
-    const address = document.getElementById('client-address')?.value.trim();
+    const name = document.getElementById('client-name')?.value?.trim() || '';
+    const phone = document.getElementById('client-phone')?.value?.trim() || '';
+    const address = document.getElementById('client-address')?.value?.trim() || '';
 
-    if (!name || name.length < 2) { showError('name-error', 'client-name'); ok = false; }
-    if (!phone || phone.length < 8) { showError('phone-error', 'client-phone'); ok = false; }
-    if (!address || address.length < 5) { showError('address-error', 'client-address'); ok = false; }
+    console.log('=== VALIDACIÓN ===');
+    console.log('Nombre:', name, '| Longitud:', name?.length);
+    console.log('Teléfono:', phone, '| Longitud:', phone?.length);
+    console.log('Dirección:', address, '| Longitud:', address?.length);
 
+    if (!name || name.length < 1) { showError('name-error', 'client-name'); ok = false; console.log('❌ Error: nombre'); }
+    if (!phone || phone.length < 7) { showError('phone-error', 'client-phone'); ok = false; console.log('❌ Error: teléfono'); }
+    if (!address || address.length < 3) { showError('address-error', 'client-address'); ok = false; console.log('❌ Error: dirección'); }
+
+    console.log('Validación resultado:', ok);
     return ok;
   }
 
@@ -344,18 +350,27 @@ const Checkout = (() => {
       SUBMIT
       ═══════════════════════════════════════════════════════ */
   function submit() {
+    console.log('=== INICIANDO SUBMIT ===');
+    
     if (!validateStep2()) {
+      console.log('❌ Validación fallida - no se envía');
       Toast.show('Completa todos los campos requeridos', 'error');
       return;
     }
 
-    const name = document.getElementById('client-name').value.trim();
-    const phone = document.getElementById('client-phone').value.trim();
-    const address = document.getElementById('client-address').value.trim();
+    console.log('✅ Validación exitosa');
+    
+    const name = document.getElementById('client-name')?.value.trim() || '';
+    const phone = document.getElementById('client-phone')?.value.trim() || '';
+    const address = document.getElementById('client-address')?.value.trim() || '';
     const notes = document.getElementById('client-notes')?.value.trim() || '';
-    const zoneId = document.getElementById('zone-select').value;
+    const zoneId = document.getElementById('zone-select')?.value || '';
     const zone = ZONES.find(z => z.id === zoneId);
     const items = Cart.getItems();
+
+    console.log('📦 Items en carrito:', items.length);
+    console.log('👤 Cliente:', name);
+    console.log('📍 Zona:', zone?.name);
 
     const btn = document.getElementById('send-order-btn');
     if (btn) { btn.disabled = true; btn.innerHTML = '⏳ Enviando...'; }
@@ -368,6 +383,10 @@ const Checkout = (() => {
       const now = new Date();
       const dateStr = now.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' });
       const timeStr = now.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+
+      console.log('💰 Subtotal:', subtotal);
+      console.log('🚚 Delivery:', deliveryCost);
+      console.log('💵 Total:', total);
 
       let itemLines = '';
       let itemNumber = 1;
@@ -423,24 +442,33 @@ const Checkout = (() => {
       ].join('\n');
 
       console.log('=== PEDIDO GENERADO ===');
-      console.log('URL WhatsApp:', `https://wa.me/${WA_NUMBER}`);
-      console.log('Mensaje:', message);
+      console.log('📱 Número WhatsApp:', WA_NUMBER);
+      console.log('🔗 URL:', `https://wa.me/${WA_NUMBER}`);
 
       const waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
       
+      console.log('🚀 Abriendo WhatsApp...');
+      
+      // Intento 1: window.open
       const waWindow = window.open(waUrl, '_blank');
       
-      if (!waWindow || waWindow.closed || typeof waWindow.closed === 'undefined') {
-        window.location.href = waUrl;
-        Toast.show('WhatsApp se abrirá automáticamente', 'default');
-      }
+      // Intento 2: si falla, usar location.href
+      setTimeout(() => {
+        if (!waWindow || waWindow.closed || typeof waWindow.closed === 'undefined') {
+          console.log('⚠️ window.open falló, usando window.location.href');
+          window.location.href = waUrl;
+          Toast.show('WhatsApp se abrirá automáticamente', 'default');
+        } else {
+          console.log('✅ WhatsApp abierto exitosamente');
+        }
+      }, 500);
       
       Cart.clear();
       close();
       Toast.show('¡Pedido enviado por WhatsApp!', 'success');
       
     } catch (error) {
-      console.error('Error al enviar pedido:', error);
+      console.error('❌ Error al enviar pedido:', error);
       Toast.show('Error al enviar. Intenta de nuevo.', 'error');
       if (btn) { btn.disabled = false; btn.innerHTML = 'Confirmar ✓'; }
     }
