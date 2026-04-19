@@ -46,27 +46,66 @@
 
   <!-- ══════════════════════ HERO ══════════════════════ -->
   <section class="hero" id="hero" aria-labelledby="hero-title">
-    <h1 class="hero-title" id="hero-title">
-      Lo rico de verdad,<br>llega a tu <span>puerta.</span>
-    </h1>
-    <p class="hero-sub">
-      Completos artesanales y papas fritas recién hechos.
-    </p>
-    <div class="hero-info-blocks">
-      <span class="hero-info-item">📍 Rahue Alto</span>
-      <span class="hero-info-dot">·</span>
-      <span class="hero-info-item">🕐 12:00 - 22:00</span>
-      <span class="hero-info-dot">·</span>
-      <span class="hero-info-item">📞 +56 9 4422 2079</span>
+    <div class="hero-slider-container" id="hero-slider">
+      <div class="hero-slides">
+        <div class="hero-slide active" data-slide="1">
+          <img src="images/slide1.png" alt="Slide 1" class="slide-img">
+        </div>
+        <div class="hero-slide" data-slide="2">
+          <img src="images/slide2.png" alt="Slide 2" class="slide-img">
+        </div>
+        <div class="hero-slide" data-slide="3">
+          <img src="images/slide3.png" alt="Slide 3" class="slide-img">
+        </div>
+        <div class="hero-slide" data-slide="4">
+          <img src="images/slide4.png" alt="Slide 4" class="slide-img">
+        </div>
+        <div class="hero-slide" data-slide="5">
+          <img src="images/slide5.png" alt="Slide 5" class="slide-img">
+        </div>
+      </div>
+<div class="hero-slide-overlay"></div>
+      <div class="hero-slide-content">
+        <h1 class="hero-title" id="hero-title">
+          <span class="hero-text active" data-text="1">Directo desde la plancha</span>
+          <span class="hero-text" data-text="2">Así se hace un completo de verdad</span>
+          <span class="hero-text" data-text="3">Papas crujientes, recién hechas</span>
+          <span class="hero-text" data-text="4">Completos italianos y con chucrut</span>
+          <span class="hero-text" data-text="5">¿Hambre?</span>
+        </h1>
+        <p class="hero-sub">
+          <span class="hero-subtext active" data-sub="1">Todo caliente, todo al momento 🔥</span>
+          <span class="hero-subtext" data-sub="2">Pan tostado, ingredientes frescos</span>
+          <span class="hero-subtext" data-sub="3">Nada congelado, puro sabor</span>
+          <span class="hero-subtext" data-sub="4">Elige tu favorito 🇨🇱</span>
+          <span class="hero-subtext" data-sub="5">Pide el tuyo ahora 👇</span>
+        </p>
+        <hr class="hero-separator">
+        <div class="hero-info-blocks">
+          <span class="hero-info-item">🕐 10:00 - 21:00</span>
+          <span class="hero-info-dot">·</span>
+          <span class="hero-info-item">📍 Rahue Alto</span>
+          <span class="hero-info-dot">·</span>
+          <span class="hero-info-item">📞 +56 9 4422 2079</span>
+        </div>
+      </div>
+      </div>
+      <div class="hero-dots">
+        <button class="hero-dot active" data-dot="1" aria-label="Slide 1"></button>
+        <button class="hero-dot" data-dot="2" aria-label="Slide 2"></button>
+        <button class="hero-dot" data-dot="3" aria-label="Slide 3"></button>
+        <button class="hero-dot" data-dot="4" aria-label="Slide 4"></button>
+        <button class="hero-dot" data-dot="5" aria-label="Slide 5"></button>
+      </div>
     </div>
   </section>
 
-  <!-- ══════════════════ CATEGORY NAV ══════════════════ -->
+  <!-- ══════════════════════════ CATEGORY NAV ══════════════════════ -->
   <nav class="category-nav" aria-label="Categorías del menú">
     <div class="category-nav-inner" id="category-list" role="tablist"></div>
   </nav>
 
-  <!-- ══════════════════════ MENÚ ══════════════════════ -->
+  <!-- ══════════════════════ MENÚ (CATÁLOGO) ══════════════════════ -->
   <main class="menu-section" id="menu" aria-label="Carta de productos">
     <div class="menu-header">
       <h2 class="menu-title" id="menu-title">Nuestra carta</h2>
@@ -75,34 +114,64 @@
     <div class="products-grid" id="products-grid" role="list"></div>
   </main>
 
-<!-- ══════════════════════ FOOTER FUSIONADO ══════════════════════ -->
-  <footer class="unified-footer" id="about">
-    <div class="uf-bg">
-      <img src="images/local.jpg" alt="Donde Javier" class="uf-bg-img">
-      <div class="uf-bg-overlay"></div>
-    </div>
-    <div class="uf-content">
-      <div class="uf-section uf-brand">
-        <p class="uf-eyebrow" style="animation-delay:0.4s">Próximamente</p>
-        <h2 class="uf-title" style="animation-delay:0.5s">Donde Javier</h2>
-        <p class="uf-tagline" style="animation-delay:0.55s">El sabor que nos identifica</p>
-        <p class="uf-desc" style="animation-delay:0.6s">
-          El sabor de siempre llega pronto a Osorno. Completos artesanos 
-          y papas fritas crujientes, hechos con los mejores ingredientes 
-          y la pasión que nos caracteriza. ¡Prepárate para probarnos!
-        </p>
+<!-- ══════════════════════ FOOTER PROFESIONAL E-COMMERCE ══════════════════════ -->
+  <footer class="professional-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <h2 class="footer-logo">Donde Javier</h2>
+        <p class="footer-tagline">El sabor que nos identifica</p>
+        <div class="footer-social">
+          <a href="#" class="social-link" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="18" cy="6" r="1"/>
+            </svg>
+          </a>
+          <a href="#" class="social-link" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h3v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+            </svg>
+          </a>
+        </div>
       </div>
-      <div class="uf-section uf-cta" style="animation-delay:0.7s">
-        <button class="uf-whatsapp" onclick="Menu.scrollToMenu()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
+      
+      <div class="footer-links">
+        <div class="footer-column">
+          <h3>Menú</h3>
+          <a href="#" onclick="Menu.filterBy('todos')">Ver todo</a>
+          <a href="#" onclick="Menu.filterBy('completos')">Completos</a>
+          <a href="#" onclick="Menu.filterBy('papas')">Papas Fritas</a>
+          <a href="#" onclick="Menu.filterBy('combos')">Combos</a>
+        </div>
+        <div class="footer-column">
+          <h3>Información</h3>
+          <a href="#about">Nuestra historia</a>
+          <a href="#menu">Carta</a>
+          <a href="#contact">Contacto</a>
+          <a href="#faq">Preguntas</a>
+        </div>
+        <div class="footer-column">
+          <h3>Atención</h3>
+          <p>Lun - Jue: 10:00 - 21:00</p>
+          <p>Vie - Sáb: 10:00 - 22:00</p>
+          <p>Dom: 12:00 - 21:00</p>
+        </div>
+      </div>
+      
+      <div class="footer-cta">
+        <button class="footer-whatsapp-btn" onclick="Menu.scrollToMenu()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.5a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
           </svg>
-          Ver Productos
+          Pedir por WhatsApp
         </button>
       </div>
     </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2026 <strong>Donde Javier</strong> · Osorno, Chile</p>
+      <p class="footer-made">Created by <a href="https://instagram.com/twiinz_x" target="_blank" rel="noopener" style="color: inherit; text-decoration: none; opacity: 0.7;">TwiiNz_X</a></p>
+    </div>
   </footer>
-  <p class="site-copy">© 2026 Donde Javier · Osorno, Chile</p>
 
 
   <!-- ══════════════════ MODAL PRODUCTO ══════════════════ -->
@@ -167,6 +236,7 @@
 
   <!-- ══════════════════ TOASTS ══════════════════════════ -->
   <div class="toast-container" id="toast-container" aria-live="assertive"></div>
+  <div id="toast-producto" class="toast-producto"></div>
 
 
   <!-- ══════════════════════ SCRIPTS ══════════════════════ -->

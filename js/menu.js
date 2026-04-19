@@ -14,6 +14,7 @@ const Menu = (() => {
   const titleEl   = () => document.getElementById('menu-title');
   const countEl   = () => document.getElementById('menu-count');
   const catListEl = () => document.getElementById('category-list');
+  const heroCatListEl = () => document.getElementById('hero-category-list');
   const overlayEl = () => document.getElementById('product-overlay');
   const modalEl   = () => document.getElementById('product-modal');
 
@@ -26,20 +27,34 @@ const Menu = (() => {
 
   /* ── categorías ── */
   function renderCategories() {
-    catListEl().innerHTML = CATEGORIES.map(cat => `
+    const catsHtml = CATEGORIES.map(cat => `
       <button class="cat-btn ${cat.id === activeCategory ? 'active' : ''}"
         data-cat="${cat.id}" onclick="Menu.filterBy('${cat.id}')">
         ${cat.icon || ''}
         ${cat.label}
       </button>`).join('');
+    
+    catListEl().innerHTML = catsHtml;
+    if (heroCatListEl()) heroCatListEl().innerHTML = catsHtml;
   }
 
   function filterBy(catId) {
     activeCategory = catId;
     renderCategories();
     renderGrid();
-    const btn = catListEl().querySelector(`[data-cat="${catId}"]`);
-    if (btn) btn.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
+    
+    setTimeout(() => {
+      const menuSection = document.getElementById('menu');
+      if (menuSection) {
+        const headerHeight = 64;
+        const categoryNavHeight = 50;
+        const targetY = menuSection.offsetTop - headerHeight - categoryNavHeight;
+        window.scrollTo({
+          top: targetY,
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
   }
 
   /* ── grid ── */
@@ -281,7 +296,21 @@ const Menu = (() => {
 
     forceCloseModal();
     const sizeStr = sizeName ? ` (${sizeName})` : '';
-    Toast.show(`${currentQty}× ${activeProduct.name}${sizeStr} añadido`, 'success');
+    showProductToast(`${currentQty}× ${activeProduct.name}${sizeStr} añadido al pedido`);
+  }
+
+  function showProductToast(message) {
+    const toast = document.getElementById('toast-producto');
+    if (toast) {
+      toast.textContent = message;
+      toast.classList.remove('show-out');
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+        toast.classList.add('show-out');
+      }, 2600);
+    }
   }
 
   function scrollToMenu() {
@@ -349,14 +378,14 @@ const Menu = (() => {
 
     if (typeof Cart !== 'undefined' && Cart.add) {
       Cart.add({ ...product, price: product.price }, 1, [], null);
-      Toast.show(`${product.name} añadido`, 'success');
+      showProductToast(`${product.name} añadido al pedido`);
     }
   }
 
   return {
     init, filterBy, openModal, forceCloseModal,
     selectSize, toggleIngredient, updateQty, addToCart, scrollToMenu,
-    filterBySearch, quickAdd,
+    filterBySearch, quickAdd, showProductToast,
   };
 
 })();
