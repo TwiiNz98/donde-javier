@@ -38,20 +38,20 @@ const Checkout = (() => {
     }
   }
 
-  /* ═══════════════════════════════════════════════════════
-     STEP 1: ULTRA-COMPACTO - Sin scroll
-     ═══════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════
+      STEP 1: MINIMALISTA - Solo sector y total
+      ═══════════════════════════════════════════════════════ */
   function renderStep1() {
     const selectedZoneId = document.getElementById('zone-select')?.value;
     const subtotal = Cart.getSubtotal();
-    const totalItems = Cart.getTotalCount();
-    const total = subtotal;
+    const deliveryCost = selectedZoneId ? getDeliveryCost(ZONES.find(z => z.id === selectedZoneId)) : 0;
+    const total = subtotal + deliveryCost;
     
     sheetEl().innerHTML = `
-      <!-- Header con stepper integrado -->
+      <!-- Header simple -->
       <div class="checkout-header-compact">
         <div class="checkout-stepper-mini">
-          <span class="step-mini ${currentStep === 1 ? 'active' : 'done'}">✓</span>
+          <span class="step-mini ${currentStep === 1 ? 'active' : 'done'}">1</span>
           <span class="step-line-mini"></span>
           <span class="step-mini ${currentStep === 2 ? 'active' : ''}">2</span>
         </div>
@@ -62,61 +62,42 @@ const Checkout = (() => {
         </button>
       </div>
 
-      <!-- Resumen pedido - barrita roja -->
-      <div class="checkout-bar-compact">
-        <span>🛒 ${totalItems} prod${totalItems !== 1 ? 's' : ''}</span>
-        <span class="checkout-bar-total">Total: $${total.toLocaleString('es-CL')}</span>
+      <!-- Total siempre visible -->
+      <div class="checkout-total-banner">
+        <div>
+          <span>Total a pagar:</span>
+          <strong>$${total.toLocaleString('es-CL')}</strong>
+        </div>
+        <div class="checkout-delivery-row">
+          <span>Delivery</span>
+          <span class="delivery-dots"></span>
+          <span id="delivery-amount">${selectedZoneId ? (deliveryCost === 0 ? 'Gratis' : '$' + deliveryCost.toLocaleString('es-CL')) : 'Precio por estimar'}</span>
+        </div>
       </div>
 
-      <!-- Contenido compact -->
-      <div class="checkout-body-compact">
-        <!-- Items (scroll interno si hay muchos) -->
-        <div class="checkout-items-compact" id="order-summary"></div>
-        
-        <!-- Zona de entrega -->
-        <div class="checkout-zone-compact">
-          <select class="checkout-select-compact" id="zone-select" onchange="Checkout._onZoneChange()">
-            <option value="">📍 Selecciona sector</option>
-            ${ZONES.map(z => `<option value="${z.id}" ${z.id === selectedZoneId ? 'selected' : ''}>${z.name}</option>`).join('')}
-          </select>
-          <p class="checkout-error-mini" id="zone-error">Selecciona zona</p>
-        </div>
-        
-        <!-- Info delivery -->
-        <div class="checkout-delivery-info" id="zone-info">
+      <!-- Selector de sector - DESTACADO -->
+      <div class="checkout-zone-section">
+        <label class="checkout-zone-label">📍 ¿Dónde te entregamos?</label>
+        <select class="checkout-select-highlight" id="zone-select" onchange="Checkout._onZoneChange()">
+          <option value="">Selecciona tu sector</option>
+          ${ZONES.map(z => `<option value="${z.id}" ${z.id === selectedZoneId ? 'selected' : ''}>${z.name}</option>`).join('')}
+        </select>
+        <div class="zone-delivery-info" id="zone-info">
           <span id="zone-info-text"></span>
         </div>
-
-        <!-- Totales inline -->
-        <div class="checkout-totals-compact">
-          <div class="totals-inline">
-            <span>Prod: $${subtotal.toLocaleString('es-CL')}</span>
-            <span class="totals-divider">|</span>
-            <span>Delivery: <span id="delivery-value">—</span></span>
-          </div>
-          <div class="totals-grand">
-            <span>Total: <strong id="total-value">$${total.toLocaleString('es-CL')}</strong></span>
-          </div>
-        </div>
       </div>
 
-      <!-- Botón siempre visible -->
+      <!-- Botón -->
       <div class="checkout-footer-compact">
-        <button class="checkout-btn-compact" id="continue-btn" onclick="Checkout._goToStep2()">
+        <button class="checkout-btn-compact" id="continue-btn" onclick="Checkout._goToStep2()" ${!selectedZoneId ? 'disabled' : ''}>
           Continuar →
         </button>
       </div>
     `;
-
-    renderSummary();
     
     if (selectedZoneId) {
       const zone = ZONES.find(z => z.id === selectedZoneId);
-      if (zone) {
-        const deliveryCost = getDeliveryCost(zone);
-        updateTotalsDisplay(deliveryCost);
-        updateZoneInfo(zone, deliveryCost);
-      }
+      if (zone) updateZoneInfo(zone, deliveryCost);
     }
   }
 
@@ -129,10 +110,9 @@ const Checkout = (() => {
     const deliveryCost = zone ? getDeliveryCost(zone) : 0;
     const subtotal = Cart.getSubtotal();
     const total = subtotal + deliveryCost;
-    const totalItems = Cart.getTotalCount();
     
     sheetEl().innerHTML = `
-      <!-- Header con stepper -->
+      <!-- Header -->
       <div class="checkout-header-compact">
         <div class="checkout-stepper-mini">
           <span class="step-mini done">✓</span>
@@ -146,68 +126,34 @@ const Checkout = (() => {
         </button>
       </div>
 
-      <!-- Barrita resumen -->
-      <div class="checkout-bar-compact">
-        <span>🛒 ${totalItems} prod${totalItems !== 1 ? 's' : ''}</span>
-        <span class="checkout-bar-total">Total: $${total.toLocaleString('es-CL')}</span>
+      <!-- Total visible -->
+      <div class="checkout-total-banner">
+        <span>Total a pagar:</span>
+        <strong>$${total.toLocaleString('es-CL')}</strong>
       </div>
 
-      <!-- Formulario profesional con labels y hints -->
-      <div class="checkout-body-compact checkout-body-form">
-        
-        <!-- Nombre completo -->
+      <!-- Datos del cliente -->
+      <div class="checkout-form-simple">
         <div class="checkout-field-group">
-          <label class="checkout-field-label">
-            Nombre completo <span class="required">*</span>
-          </label>
-          <input type="text" class="checkout-field-input" id="client-name"
-                 placeholder="Tu nombre y apellido"
-                 autocomplete="given-name"
-                 oninput="Checkout._clearError('name-error', 'client-name')">
-          <span class="checkout-field-hint">📌 Ej: Juan Pérez</span>
-          <p class="checkout-error-mini" id="name-error">Ingresa tu nombre completo</p>
+          <label class="checkout-field-label">Nombre completo</label>
+          <input type="text" id="client-name" placeholder="Tu nombre" class="checkout-input-simple" autocomplete="given-name">
         </div>
-        
-        <!-- Teléfono -->
         <div class="checkout-field-group">
-          <label class="checkout-field-label">
-            Teléfono de contacto <span class="required">*</span>
-          </label>
-          <input type="tel" class="checkout-field-input" id="client-phone"
-                 placeholder="+56 9 0000 0000"
-                 autocomplete="tel"
-                 oninput="Checkout._clearError('phone-error', 'client-phone')">
-          <span class="checkout-field-hint">📌 Para confirmar tu pedido por WhatsApp</span>
-          <p class="checkout-error-mini" id="phone-error">Ingresa un teléfono válido</p>
+          <label class="checkout-field-label">Teléfono</label>
+          <input type="tel" id="client-phone" placeholder="ej: 942345678" class="checkout-input-simple" autocomplete="tel">
         </div>
-        
-        <!-- Dirección -->
         <div class="checkout-field-group">
-          <label class="checkout-field-label">
-            Dirección de entrega <span class="required">*</span>
-          </label>
-          <input type="text" class="checkout-field-input" id="client-address"
-                 placeholder="Calle, número, block, departamento..."
-                 autocomplete="street-address"
-                 oninput="Checkout._clearError('address-error', 'client-address')">
-          <span class="checkout-field-hint">📌 Ej: Av. Los Lagos 1234, Depto 501</span>
-          <p class="checkout-error-mini" id="address-error">Ingresa tu dirección de entrega</p>
+          <label class="checkout-field-label">Dirección de entrega</label>
+          <input type="text" id="client-address" placeholder="Calle, número, block..." class="checkout-input-simple" autocomplete="street-address">
         </div>
-        
-        <!-- Notas -->
         <div class="checkout-field-group">
-          <label class="checkout-field-label">
-            Notas adicionales <span style="font-weight:400;color:var(--text-3)">(opcional)</span>
-          </label>
-          <input type="text" class="checkout-field-input" id="client-notes"
-                 placeholder="Timbre, referencia, piso, sector...">
-          <span class="checkout-field-hint">📌 Información adicional para encontrarte más fácil</span>
+          <label class="checkout-field-label">Notas (opcional)</label>
+          <input type="text" id="client-notes" placeholder="Timbre, referencia, piso..." class="checkout-input-simple">
         </div>
-        
       </div>
 
-      <!-- Footer con botones -->
-      <div class="checkout-footer-compact">
+      <!-- Botones -->
+      <div class="checkout-footer-compact checkout-footer-split">
         <button class="checkout-btn-secondary" onclick="Checkout._goToStep1()">
           ← Atrás
         </button>
@@ -254,11 +200,9 @@ const Checkout = (() => {
     const infoEl = document.getElementById('zone-info');
     const textEl = document.getElementById('zone-info-text');
     
-    if (infoEl && textEl) {
+    if (infoEl && textEl && zone) {
       infoEl.classList.add('show');
-      const freeMsg = zone.minFree ? ` (gratis desde $${zone.minFree.toLocaleString('es-CL')})` : '';
-      const costMsg = deliveryCost === 0 ? '<strong style="color:var(--green)">Gratis</strong>' : `$${deliveryCost.toLocaleString('es-CL')}${freeMsg}`;
-      textEl.innerHTML = `🚚 ${costMsg} · ⏱ ${zone.eta}`;
+      textEl.innerHTML = `Tiempo Estimado 🚚 ${zone.eta}`;
     }
   }
 
@@ -268,7 +212,6 @@ const Checkout = (() => {
   function goToStep2() {
     const zoneId = document.getElementById('zone-select')?.value;
     if (!zoneId) {
-      showError('zone-error', 'zone-select');
       Toast.show('Selecciona tu zona de entrega', 'error');
       return;
     }
@@ -288,18 +231,37 @@ const Checkout = (() => {
     const select = document.getElementById('zone-select');
     const zoneId = select?.value;
     const zone = ZONES.find(z => z.id === zoneId);
+    const btn = document.getElementById('continue-btn');
 
-    if (zone) {
-      const deliveryCost = getDeliveryCost(zone);
-      Cart.setDelivery(deliveryCost);
-      updateTotalsDisplay(deliveryCost);
-      updateZoneInfo(zone, deliveryCost);
-      clearError('zone-error', 'zone-select');
-    } else {
-      const infoEl = document.getElementById('zone-info');
-      if (infoEl) infoEl.classList.remove('show');
-      updateTotalsDisplay(0);
-      Cart.setDelivery(0);
+    if (btn) {
+      btn.disabled = !zoneId;
+    }
+
+    const deliveryEl = document.getElementById('delivery-amount');
+    if (deliveryEl) {
+      if (zone) {
+        const deliveryCost = getDeliveryCost(zone);
+        Cart.setDelivery(deliveryCost);
+        deliveryEl.textContent = deliveryCost === 0 ? 'Gratis' : '$' + deliveryCost.toLocaleString('es-CL');
+        updateZoneInfo(zone, deliveryCost);
+        updateTotalBanner();
+      } else {
+        const infoEl = document.getElementById('zone-info');
+        if (infoEl) infoEl.classList.remove('show');
+        Cart.setDelivery(0);
+        deliveryEl.textContent = 'Precio por estimar';
+        updateTotalBanner();
+      }
+    }
+  }
+
+  function updateTotalBanner() {
+    const subtotal = Cart.getSubtotal();
+    const delivery = Cart.getDelivery() || 0;
+    const total = subtotal + delivery;
+    const totalEl = document.querySelector('.checkout-total-banner strong');
+    if (totalEl) {
+      totalEl.textContent = `$${total.toLocaleString('es-CL')}`;
     }
   }
 
@@ -314,22 +276,15 @@ const Checkout = (() => {
      VALIDATION
      ═══════════════════════════════════════════════════════ */
   function validateStep2() {
-    let ok = true;
     const name = document.getElementById('client-name')?.value?.trim() || '';
     const phone = document.getElementById('client-phone')?.value?.trim() || '';
     const address = document.getElementById('client-address')?.value?.trim() || '';
 
-    console.log('=== VALIDACIÓN ===');
-    console.log('Nombre:', name, '| Longitud:', name?.length);
-    console.log('Teléfono:', phone, '| Longitud:', phone?.length);
-    console.log('Dirección:', address, '| Longitud:', address?.length);
+    if (!name) { Toast.show('Ingresa tu nombre', 'error'); return false; }
+    if (!phone) { Toast.show('Ingresa tu teléfono', 'error'); return false; }
+    if (!address) { Toast.show('Ingresa tu dirección', 'error'); return false; }
 
-    if (!name || name.length < 1) { showError('name-error', 'client-name'); ok = false; console.log('❌ Error: nombre'); }
-    if (!phone || phone.length < 7) { showError('phone-error', 'client-phone'); ok = false; console.log('❌ Error: teléfono'); }
-    if (!address || address.length < 3) { showError('address-error', 'client-address'); ok = false; console.log('❌ Error: dirección'); }
-
-    console.log('Validación resultado:', ok);
-    return ok;
+    return true;
   }
 
   function showError(errId, fieldId) {
